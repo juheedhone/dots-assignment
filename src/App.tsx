@@ -1,16 +1,26 @@
 import { Paperclip, Search, Settings, User } from "lucide-react";
 import { motion } from "motion/react";
+import { useState } from "react";
 import Data from "./components/Data";
 
 const App = () => {
+  const [input, setInput] = useState("");
+
+  const handleChange = (value: string) => {
+    setInput(value);
+    console.log(value);
+  };
+
   return (
     <motion.div className="bg-white rounded-2xl shadow-lg p-6 sm:w-4/5 md:w-3/4 w-full">
       <div className="flex">
         <Search className="" />
         <input
           type="text"
+          value={input}
           placeholder="Searching is easier"
           className="outline-0 pl-2 flex-1 text-gray-800"
+          onChange={(e) => handleChange(e.target.value)}
         />
         <div className=" border border-gray-300 px-2 rounded-lg  md:block hidden">
           s

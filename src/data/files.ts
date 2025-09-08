@@ -13,7 +13,6 @@ export const files: IFiles[] = [
   {
     type: "folder",
     name: "Marketing Assets",
-
     parentFolder: "Root",
     createdAt: "2025-06-12T10:22:41Z",
     updatedAt: "2025-08-03T07:15:10Z",
