@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import { files, type IFiles } from "../data/files";
 import { users, type IUsers } from "../data/users";
 
-export function useSearch(query: string) {
-  const [results, setResults] = useState<{ users: IUsers[]; files: IFiles[] }>({
+export default function useSearch(query: string) {
+  const [result, setResult] = useState<{ users: IUsers[]; files: IFiles[] }>({
     users: [],
     files: [],
   });
@@ -27,12 +27,13 @@ export function useSearch(query: string) {
         f.name.toLowerCase().includes(lower)
       );
 
-      setResults({ users: [...userMatches], files: [...fileMatches] });
+      setResult({ users: [...userMatches], files: [...fileMatches] });
       setLoading(false);
     }, 1000);
 
     return () => clearTimeout(timeout);
   }, [query, users, files]);
 
-  return { results, loading };
+  if (!query) return { result: { users: [], files: [], loading: false } };
+  return { result, loading };
 }

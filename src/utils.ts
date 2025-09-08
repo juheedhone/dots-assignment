@@ -1,3 +1,6 @@
+import { type ClassValue, clsx } from "clsx";
+import { twMerge } from "tailwind-merge";
+
 export function timeAgo(date: Date): string {
   const now = new Date().getTime();
   const then = date.getTime();
@@ -19,4 +22,16 @@ export function timeAgo(date: Date): string {
 
   const years = Math.floor(months / 12);
   return `${years}yr`;
+}
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}
+
+export function shuffleArray(array: any[]) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
 }

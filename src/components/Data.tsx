@@ -1,51 +1,57 @@
-import { files, type IFiles } from "../data/files";
-import { users, type IUsers } from "../data/users";
+import { Folder, Image, Presentation, Video } from "lucide-react";
+import { type IFiles } from "../data/files";
+import { type IUsers } from "../data/users";
+import { timeAgo } from "../utils";
 
 interface Props {
-  result: IUsers | IFiles;
+  result: (IUsers | IFiles)[];
+  loading?: boolean;
 }
 
-const Data = () => {
-  return (
-    <div className="">
-      {users.slice(0, 6).map((u) => (
-        <div className="flex items-center py-4 border-b border-gray-100">
-          <img src={u.profilePic} alt="" className="size-8 mr-4 rounded-lg" />
-          <div>
-            <p className="text-black font-medium">{u.name}</p>
-            <p>{u.lastActive}</p>
-          </div>
-        </div>
-      ))}
+const Data = ({ result, loading }: Props) => {
+  if (loading) {
+    return <div className="w-full h-5 bg-gray-400 animate-pulse"></div>;
+  }
 
-      {files.slice(0, 6).map((f) => (
-        <div className="flex items-center py-4 border-b border-gray-100">
-          <div className="size-8 mr-4 bg-gray-200 rounded-lg flex items-center justify-center ">
-            <div>{getIconFromType({ type: f.type, classNames: "size-4" })}</div>
+  return (
+    <div className="h-auto overflow-auto max-h-80">
+      {result.map((i) => {
+        return i.kind === "user" ? (
+          <div className="flex items-center py-4 border-b border-gray-100">
+            <img src={i.profilePic} alt="" className="mr-4 rounded-lg size-8" />
+            <div>
+              <p className="font-medium text-black">{i.name}</p>
+              <p>{i.lastActive}</p>
+            </div>
           </div>
-          <div className=" text-gray-900">
-            <span className="text-gray-900 font-medium">{f.name}</span>
-            {f.filesInside && (
-              <span className="ml-2 opacity-40 text-sm bg-gray-300 px-1 rounded-md">
-                {f.filesInside} files
-              </span>
-            )}
-            {f.extension && <span>.{f.extension}</span>}
-            {f.parentFolder && <p className="opacity-40">{f.parentFolder}</p>}
-            {f.updatedAt
-              ? `Edited ${timeAgo(new Date(f.updatedAt))} ago`
-              : `Added at ${timeAgo(new Date(f.createdAt))}`}
+        ) : (
+          <div className="flex items-center py-4 border-b border-gray-100">
+            <div className="flex items-center justify-center mr-4 bg-gray-200 rounded-lg size-8 ">
+              <div>
+                {getIconFromType({ type: i.type, classNames: "size-4" })}
+              </div>
+            </div>
+            <div className="text-gray-900 ">
+              <span className="font-medium text-gray-900">{i.name}</span>
+              {i.filesInside && (
+                <span className="px-1 ml-2 text-sm bg-gray-300 rounded-md opacity-40">
+                  {i.filesInside} files
+                </span>
+              )}
+              {i.extension && <span>.{i.extension}</span>}
+              {i.parentFolder && <p className="opacity-40">{i.parentFolder}</p>}
+              {i.updatedAt
+                ? `Edited ${timeAgo(new Date(i.updatedAt))} ago`
+                : `Added at ${timeAgo(new Date(i.createdAt))}`}
+            </div>
           </div>
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 };
 
 export default Data;
-
-import { Folder, Image, Presentation, Video } from "lucide-react";
-import { timeAgo } from "../utils";
 
 export function getIconFromType(payload: { type: string; classNames: string }) {
   const { type, classNames } = payload;

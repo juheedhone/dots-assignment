@@ -1,52 +1,90 @@
-import { Paperclip, Search, Settings, User } from "lucide-react";
-import { motion } from "motion/react";
+import { LoaderCircle, Paperclip, Search, Settings, User } from "lucide-react";
+import { AnimatePresence, motion } from "motion/react";
 import { useState } from "react";
 import Data from "./components/Data";
+import useSearch from "./hooks/useSearch";
+import { shuffleArray } from "./utils";
 
 const App = () => {
   const [input, setInput] = useState("");
+  const { result, loading } = useSearch(input);
+  const isSearching = input.length > 0;
 
   const handleChange = (value: string) => {
     setInput(value);
-    console.log(value);
   };
 
   return (
-    <motion.div className="bg-white rounded-2xl shadow-lg p-6 sm:w-4/5 md:w-3/4 w-full">
+    <motion.div
+      className="w-full p-6 bg-white shadow-lg rounded-2xl sm:w-4/5 md:w-3/4 max-h-[30rem]"
+      initial={false}
+      animate={{
+        minHeight: isSearching ? "30rem" : "5rem",
+      }}
+      transition={{
+        type: "tween",
+        duration: 0.5,
+        ease: "easeInOut",
+      }}
+    >
       <div className="flex">
-        <Search className="" />
+        {loading ? (
+          <LoaderCircle className="animate-spin" />
+        ) : (
+          <Search className="" />
+        )}
+
         <input
           type="text"
           value={input}
           placeholder="Searching is easier"
-          className="outline-0 pl-2 flex-1 text-gray-800"
+          className="flex-1 pl-2 text-gray-800 outline-0"
           onChange={(e) => handleChange(e.target.value)}
         />
-        <div className=" border border-gray-300 px-2 rounded-lg  md:block hidden">
+        <div className="hidden px-2 border border-gray-300 rounded-lg md:block">
           s
         </div>
-        <p className="pl-2 md:block hidden">quick access</p>
+        <p className="hidden pl-2 md:block">quick access</p>
       </div>
-      <div className="flex items-center mt-6">
-        <div className="flex items-center">
-          <p className="mr-2">All</p>
-          <p>0</p>
-        </div>
-        <div className="flex items-center">
-          <Paperclip className="size-4 ml-4" />
-          <p className="ml-1 mr-2">Files</p>
-          <p>0</p>
-        </div>
-        <div className="flex flex-1 items-center">
-          <User className="size-4 ml-4" />
-          <p className="ml-1 mr-2">People</p>
-          <p>0</p>
-        </div>
-        <button className="cursor-pointer">
-          <Settings />
-        </button>
-      </div>
-      <Data />
+
+      <AnimatePresence>
+        {isSearching && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{
+              opacity: { duration: 0.2, delay: 0.2 },
+              height: { duration: 0.5, ease: "easeInOut" },
+            }}
+            style={{ overflow: "hidden" }}
+          >
+            <div className="flex items-center mt-6 ">
+              <div className="flex items-center">
+                <p className="mr-2">All</p>
+                <p>0</p>
+              </div>
+              <div className="flex items-center">
+                <Paperclip className="ml-4 size-4" />
+                <p className="ml-1 mr-2">Files</p>
+                <p>0</p>
+              </div>
+              <div className="flex items-center flex-1">
+                <User className="ml-4 size-4" />
+                <p className="ml-1 mr-2">People</p>
+                <p>0</p>
+              </div>
+              <button className="cursor-pointer">
+                <Settings />
+              </button>
+            </div>
+            <Data
+              result={shuffleArray([...result.files, ...result.users])}
+              loading={loading}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.div>
   );
 };
