@@ -5,7 +5,7 @@ import "./index.css";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <main className="flex items-center justify-center h-screen">
+    <main className="flex items-center justify-center h-screen p-2 sm:p-4 md:p-6">
       <App />
     </main>
   </StrictMode>
