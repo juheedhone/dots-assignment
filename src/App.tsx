@@ -14,6 +14,15 @@ const App = () => {
     setInput(value);
   };
 
+  const handleClear = () => {
+    setInput("");
+  };
+
+  const totalResults =
+    (result.files?.length || 0) + (result.users?.length || 0);
+  const fileCount = result.files?.length || 0;
+  const userCount = result.users?.length || 0;
+
   return (
     <motion.div
       className="w-full p-6 bg-white shadow-lg rounded-2xl sm:w-4/5 md:w-3/4 max-h-[30rem]"
@@ -33,7 +42,6 @@ const App = () => {
         ) : (
           <Search className="" />
         )}
-
         <input
           type="text"
           value={input}
@@ -41,10 +49,18 @@ const App = () => {
           className="flex-1 pl-2 text-gray-800 outline-0"
           onChange={(e) => handleChange(e.target.value)}
         />
-        <div className="hidden px-2 border border-gray-300 rounded-lg md:block">
-          s
-        </div>
-        <p className="hidden pl-2 md:block">quick access</p>
+        {isSearching ? (
+          <button className="text-black underline cursor-pointer" onClick={handleClear}>
+            Clear
+          </button>
+        ) : (
+          <>
+            <div className="hidden px-2 border border-gray-300 rounded-lg md:block">
+              s
+            </div>
+            <p className="hidden pl-2 md:block">quick access</p>
+          </>
+        )}
       </div>
 
       <AnimatePresence>
@@ -60,19 +76,19 @@ const App = () => {
             style={{ overflow: "hidden" }}
           >
             <div className="flex items-center mt-6 ">
-              <div className="flex items-center">
-                <p className="mr-2">All</p>
-                <p>0</p>
+              <div className="flex items-center border-b-2 border-b-black">
+                <p className="mr-2 font-semibold text-black">All</p>
+                <p>{totalResults}</p>
               </div>
               <div className="flex items-center">
                 <Paperclip className="ml-4 size-4" />
                 <p className="ml-1 mr-2">Files</p>
-                <p>0</p>
+                <p>{fileCount}</p>
               </div>
               <div className="flex items-center flex-1">
                 <User className="ml-4 size-4" />
                 <p className="ml-1 mr-2">People</p>
-                <p>0</p>
+                <p>{userCount}</p>
               </div>
               <button className="cursor-pointer">
                 <Settings />
