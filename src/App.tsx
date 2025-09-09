@@ -46,11 +46,14 @@ const App = () => {
           type="text"
           value={input}
           placeholder="Searching is easier"
-          className="flex-1 pl-2 text-gray-800 outline-0"
+          className="flex-1 pl-2 text-xl font-medium text-gray-800 text- outline-0"
           onChange={(e) => handleChange(e.target.value)}
         />
         {isSearching ? (
-          <button className="text-black underline cursor-pointer" onClick={handleClear}>
+          <button
+            className="text-black underline cursor-pointer"
+            onClick={handleClear}
+          >
             Clear
           </button>
         ) : (

@@ -93,11 +93,22 @@ const Data = ({ result, loading }: Props) => {
                   {i.filesInside} files
                 </span>
               )}
+
               {i.extension && <span>.{i.extension}</span>}
-              {i.parentFolder && <p className="opacity-40">{i.parentFolder}</p>}
-              {i.updatedAt
-                ? `Edited ${timeAgo(new Date(i.updatedAt))} ago`
-                : `Added at ${timeAgo(new Date(i.createdAt))}`}
+              <div className="flex items-center gap-1">
+                {i.parentFolder && (
+                  <>
+                    <p className="text-sm opacity-60">{i.parentFolder}</p>
+                    <div className="w-1 h-1 bg-gray-400 rounded-full"></div>
+                  </>
+                )}
+
+                <p className="text-sm opacity-60">
+                  {i.updatedAt
+                    ? `Edited ${timeAgo(new Date(i.updatedAt))} ago`
+                    : `Added at ${timeAgo(new Date(i.createdAt))}`}
+                </p>
+              </div>
             </div>
           </div>
         );
