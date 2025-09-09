@@ -1,4 +1,11 @@
-import { Folder, Image, Presentation, Video } from "lucide-react";
+import {
+  ExternalLink,
+  Folder,
+  Image,
+  LinkIcon,
+  Presentation,
+  Video,
+} from "lucide-react";
 import { type IFiles } from "../data/files";
 import { type IUsers } from "../data/users";
 import { timeAgo } from "../utils";
@@ -69,10 +76,10 @@ const Data = ({ result, loading }: Props) => {
   }
 
   return (
-    <div className="h-auto overflow-auto max-h-80">
+    <div className="h-auto mt-2 overflow-auto max-h-80">
       {result.map((i) => {
         return i.kind === "user" ? (
-          <div className="flex items-center py-4 border-b border-gray-100 hover: ">
+          <div className="flex items-center px-2 py-4 border-b border-gray-100 rounded-lg group hover:bg-gray-100">
             <img src={i.profilePic} alt="" className="mr-4 rounded-lg size-8" />
             <div>
               <p className="font-medium text-black">{i.name}</p>
@@ -81,9 +88,22 @@ const Data = ({ result, loading }: Props) => {
                   `Active ${timeAgo(new Date(i.lastActive))} ago`}
               </p>
             </div>
+            <div className="items-center hidden ml-auto group-hover:flex *:cursor-pointer ">
+              <div className="p-1 rounded-sm hover:bg-gray-100">
+                <LinkIcon className="size-4" />
+              </div>
+              <a
+                className="flex items-center *:opacity-80 *:hover:opacity-100"
+                target="_blank"
+                href="https://getdots.in/"
+              >
+                <ExternalLink className="ml-4 size-4" />
+                <p className="ml-1">New Tab</p>
+              </a>
+            </div>
           </div>
         ) : (
-          <div className="flex items-center py-4 border-b border-gray-100">
+          <div className="flex items-center px-2 py-4 border-b border-gray-100 rounded-lg group hover:bg-gray-100">
             <div className="flex items-center justify-center mr-4 bg-gray-200 rounded-lg size-8 ">
               <div>
                 {getIconFromType({ type: i.type, classNames: "size-4" })}
@@ -96,7 +116,6 @@ const Data = ({ result, loading }: Props) => {
                   {i.filesInside} files
                 </span>
               )}
-
               {i.extension && <span>.{i.extension}</span>}
               <div className="flex items-center gap-1">
                 {i.parentFolder && (
@@ -112,6 +131,19 @@ const Data = ({ result, loading }: Props) => {
                     : `Added at ${timeAgo(new Date(i.createdAt))}`}
                 </p>
               </div>
+            </div>
+            <div className="items-center hidden ml-auto group-hover:flex *:cursor-pointer ">
+              <div className="p-1 rounded-sm hover:bg-gray-100">
+                <LinkIcon className="size-4" />
+              </div>
+              <a
+                className="flex items-center *:opacity-80 *:hover:opacity-100"
+                target="_blank"
+                href="https://getdots.in/"
+              >
+                <ExternalLink className="ml-4 size-4" />
+                <p className="ml-1">New Tab</p>
+              </a>
             </div>
           </div>
         );

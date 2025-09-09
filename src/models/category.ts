@@ -1,1 +1,1 @@
-export type ICategory = "user" | "file" | "chat" | "list";
+export type ICategory = "people" | "file" | "chat" | "list";

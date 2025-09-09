@@ -1,20 +1,22 @@
-import { LoaderCircle, Paperclip, Search, Settings, User } from "lucide-react";
+import { LoaderCircle, Search, Settings } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { useState } from "react";
 import Data from "./components/Data";
 import SettingsPanel from "./components/SettingsPanel";
 import useSearch from "./hooks/useSearch";
 import type { ICategory } from "./models/category";
+import { getCategoryIcon } from "./renderUtils";
 import { cn, shuffleArray } from "./utils";
 
 const App = () => {
   const [input, setInput] = useState("");
   const { result, loading } = useSearch(input);
+  console.log("🚀 ~ App ~ result:", result);
   const isSearching = input.length > 0;
   const [openSettings, setOpenSettings] = useState(false);
   const [activeCategory, setActiveCategory] = useState<ICategory[]>([
     "file",
-    "user",
+    "people",
   ]);
 
   const handleChange = (value: string) => {
@@ -34,9 +36,7 @@ const App = () => {
   };
 
   const totalResults =
-    (result.files?.length || 0) + (result.users?.length || 0);
-  const fileCount = result.files?.length || 0;
-  const userCount = result.users?.length || 0;
+    (result.file?.length || 0) + (result.people?.length || 0);
 
   return (
     <motion.div
@@ -94,29 +94,33 @@ const App = () => {
             style={{ overflow: "hidden" }}
           >
             <div className="relative flex items-center mt-6">
-              <div className="flex items-center border-b-2 border-b-black">
+              <div className="flex items-center px-1 pb-2 mx-2 border-b-2 border-b-black">
                 <p className="mr-2 font-semibold text-black">All</p>
                 <p>{totalResults}</p>
               </div>
-              <div className="flex items-center">
-                <Paperclip className="ml-4 size-4" />
-                <p className="ml-1 mr-2">Files</p>
-                <p>{fileCount}</p>
-              </div>
-              <div className="flex items-center flex-1">
-                <User className="ml-4 size-4" />
-                <p className="ml-1 mr-2">People</p>
-                <p>{userCount}</p>
-              </div>
+              {activeCategory.map((cat) => (
+                <div key={cat} className="flex items-center px-1 pb-2 mx-2">
+                  {getCategoryIcon({
+                    category: cat,
+                    className: "mr-2 size-4",
+                  })}
+                  <p className="mr-2 font-semibold text-black">
+                    {cat.charAt(0).toUpperCase() + cat.slice(1)}
+                  </p>
+                  <p>{result[cat as "people" | "file"]?.length}</p>
+                </div>
+              ))}
+
               <button
                 className={cn(
-                  "cursor-pointer transition",
+                  "cursor-pointer transition ml-auto",
                   openSettings ? "rotate-90" : "rotate-0"
                 )}
                 onClick={() => setOpenSettings((prev) => !prev)}
               >
                 <Settings />
               </button>
+
               <SettingsPanel
                 activeCategory={activeCategory}
                 openSettings={openSettings}
@@ -124,7 +128,7 @@ const App = () => {
               />
             </div>
             <Data
-              result={shuffleArray([...result.files, ...result.users])}
+              result={shuffleArray([...result.file, ...result.people])}
               loading={loading}
             />
           </motion.div>

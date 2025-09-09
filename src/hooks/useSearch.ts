@@ -3,9 +3,9 @@ import { files, type IFiles } from "../data/files";
 import { users, type IUsers } from "../data/users";
 
 export default function useSearch(query: string) {
-  const [result, setResult] = useState<{ users: IUsers[]; files: IFiles[] }>({
-    users: [],
-    files: [],
+  const [result, setResult] = useState<{ people: IUsers[]; file: IFiles[] }>({
+    people: [],
+    file: [],
   });
   const [loading, setLoading] = useState(false);
 
@@ -27,13 +27,13 @@ export default function useSearch(query: string) {
         f.name.toLowerCase().includes(lower)
       );
 
-      setResult({ users: [...userMatches], files: [...fileMatches] });
+      setResult({ people: [...userMatches], file: [...fileMatches] });
       setLoading(false);
     }, 1000);
 
     return () => clearTimeout(timeout);
   }, [query, users, files]);
 
-  if (!query) return { result: { users: [], files: [], loading: false } };
+  if (!query) return { result: { people: [], file: [], loading: false } };
   return { result, loading };
 }

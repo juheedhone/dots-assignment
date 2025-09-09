@@ -45,7 +45,7 @@ const SettingsPanel = ({
             <li
               className={cn(
                 "flex items-center justify-between p-2 rounded cursor-not-allowed transition-all",
-                !activeCategory.includes("user") ? "text-gray-400" : ""
+                !activeCategory.includes("people") ? "text-gray-400" : ""
               )}
             >
               <div className="flex items-center">
@@ -53,8 +53,8 @@ const SettingsPanel = ({
                 People
               </div>
               <ToggleButton
-                isToggled={activeCategory.includes("user")}
-                onToggle={() => handleToggleCategory("user")}
+                isToggled={activeCategory.includes("people")}
+                onToggle={() => handleToggleCategory("people")}
               />
             </li>
 
