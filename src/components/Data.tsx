@@ -72,11 +72,14 @@ const Data = ({ result, loading }: Props) => {
     <div className="h-auto overflow-auto max-h-80">
       {result.map((i) => {
         return i.kind === "user" ? (
-          <div className="flex items-center py-4 border-b border-gray-100">
+          <div className="flex items-center py-4 border-b border-gray-100 hover: ">
             <img src={i.profilePic} alt="" className="mr-4 rounded-lg size-8" />
             <div>
               <p className="font-medium text-black">{i.name}</p>
-              <p>{i.lastActive}</p>
+              <p className="text-sm text-gray-400">
+                {i.lastActive &&
+                  `Active ${timeAgo(new Date(i.lastActive))} ago`}
+              </p>
             </div>
           </div>
         ) : (
@@ -98,12 +101,12 @@ const Data = ({ result, loading }: Props) => {
               <div className="flex items-center gap-1">
                 {i.parentFolder && (
                   <>
-                    <p className="text-sm opacity-60">{i.parentFolder}</p>
+                    <p className="text-sm text-gray-400 ">{i.parentFolder}</p>
                     <div className="w-1 h-1 bg-gray-400 rounded-full"></div>
                   </>
                 )}
 
-                <p className="text-sm opacity-60">
+                <p className="text-sm text-gray-400">
                   {i.updatedAt
                     ? `Edited ${timeAgo(new Date(i.updatedAt))} ago`
                     : `Added at ${timeAgo(new Date(i.createdAt))}`}
